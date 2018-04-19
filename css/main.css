@@ -1823,7 +1823,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d6400f;
+  background: #c2a2e9;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -1975,12 +1975,19 @@ pre .javascript .function {
   display: inline-block;
 }
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 8px;
+  height: 8px;
   background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #222; /*rgba(102, 109, 137,0.6)*/
+}
+::selection {
+  background: #eb5055;
+}
+::-moz-selection {
+  background: #eb5055;
 }
 .theme-next #ds-thread #ds-reset {
   color: #555;

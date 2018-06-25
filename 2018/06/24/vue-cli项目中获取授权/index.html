@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <meta name="keywords" content="vue,javascript," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1、引入微信js-sdknpm install weixin-js-sdk --save 2、项目中使用import wx from &amp;#39;weixin-js-sdk&amp;#39;,如下图：">
+<meta name="keywords" content="vue,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue-cli项目中获取微信授权">
+<meta property="og:url" content="http://yoursite.com/2018/06/24/vue-cli项目中获取授权/index.html">
+<meta property="og:site_name" content="杜万福的博客">
+<meta property="og:description" content="1、引入微信js-sdknpm install weixin-js-sdk --save 2、项目中使用import wx from &amp;#39;weixin-js-sdk&amp;#39;,如下图：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/wx-js-sdk.png">
+<meta property="og:updated_time" content="2018-06-25T07:10:54.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vue-cli项目中获取微信授权">
+<meta name="twitter:description" content="1、引入微信js-sdknpm install weixin-js-sdk --save 2、项目中使用import wx from &amp;#39;weixin-js-sdk&amp;#39;,如下图：">
+<meta name="twitter:image" content="http://yoursite.com/images/wx-js-sdk.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/24/vue-cli项目中获取授权/"/>
+
+
+
+
+
+  <title>vue-cli项目中获取微信授权 | 杜万福的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/hotwhy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">杜万福的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">滴水穿石</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/24/vue-cli项目中获取授权/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杜万福">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/dwf.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杜万福的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vue-cli项目中获取微信授权</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T20:12:37+08:00">
+                2018-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/24/vue-cli项目中获取授权/" class="leancloud_visitors" data-flag-title="vue-cli项目中获取微信授权">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1、引入微信js-sdk"><a href="#1、引入微信js-sdk" class="headerlink" title="1、引入微信js-sdk"></a>1、引入微信js-sdk</h3><p><code>npm install weixin-js-sdk --save</code></p>
+<h3 id="2、项目中使用"><a href="#2、项目中使用" class="headerlink" title="2、项目中使用"></a>2、项目中使用</h3><p><code>import wx from &#39;weixin-js-sdk&#39;</code>,如下图：<br><img src="/images/wx-js-sdk.png" alt="“图片描述”"><br><a id="more"></a></p>
+<h3 id="3、具体开始使用"><a href="#3、具体开始使用" class="headerlink" title="3、具体开始使用"></a>3、具体开始使用</h3><p>具体代码如下：</p>
+<p>1、template模板<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wraper"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">loadmore</span> <span class="attr">:height</span>=<span class="string">"height"</span> @<span class="attr">loadBottom</span>=<span class="string">"loadBottom"</span> @<span class="attr">loadTop</span>=<span class="string">"loadTop"</span> <span class="attr">ref</span>=<span class="string">"loadmores"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">mt-swipe</span> <span class="attr">:auto</span>=<span class="string">"2000"</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">mt-swipe-item</span> <span class="attr">v-for</span>=<span class="string">"(item, index) in items"</span> <span class="attr">:key</span>=<span class="string">"item.id"</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">img</span> <span class="attr">:src</span>=<span class="string">"item.url"</span> <span class="attr">class</span>=<span class="string">"img"</span> @<span class="attr">click</span>=<span class="string">"banner(index)"</span>/&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">mt-swipe-item</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">mt-swipe</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!--店铺列表--&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"listWarper"</span> <span class="attr">v-for</span>=<span class="string">"(item, index) in list"</span> <span class="attr">:key</span>=<span class="string">"index"</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"listBox clearfix"</span> @<span class="attr">click</span>=<span class="string">"shopInfo(item.shopNum, item.customerNum)"</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxLeft"</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">img</span> <span class="attr">:src</span>=<span class="string">"item.customerLogo"</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxRight"</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxRightTop"</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"clearfix"</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxRightTopName"</span>&gt;</span></span><br><span class="line">                                        &#123;&#123;item.shopName&#125;&#125;</span><br><span class="line">                                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxRightTopDistant"</span>&gt;</span></span><br><span class="line">                                        &#123;&#123;item.distance&#125;&#125;</span><br><span class="line">                                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxIntroduce"</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxVarieties"</span> <span class="attr">v-if</span>=<span class="string">"item.shopAddress"</span>&gt;</span>&#123;&#123;item.shopAddress&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"boxVarieties"</span> <span class="attr">v-if</span>=<span class="string">"item.industryName"</span>&gt;</span>&#123;&#123;item.industryName&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">loadmore</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>2、script部分（核心）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">import</span> wx <span class="keyword">from</span> <span class="string">'weixin-js-sdk'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">        data() &#123;</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                height: <span class="string">'calc(100vh - 1rem)'</span>,</span><br><span class="line">                name: <span class="string">'111'</span>,</span><br><span class="line">                items: [&#123;</span><br><span class="line">                    title: <span class="string">'图片1'</span>,</span><br><span class="line">                    url: <span class="built_in">require</span>(<span class="string">'../../assets/imgs/home_banner.jpg'</span>)</span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    title: <span class="string">'图片2'</span>,</span><br><span class="line">                    url: <span class="built_in">require</span>(<span class="string">'../../assets/imgs/home_banner.jpg'</span>)</span><br><span class="line">                &#125;],</span><br><span class="line">                lat: <span class="string">''</span>,</span><br><span class="line">                lng: <span class="string">''</span>,</span><br><span class="line">                pageNum: <span class="number">1</span>,<span class="comment">//页码</span></span><br><span class="line">                loader: <span class="literal">true</span>,</span><br><span class="line">                list: [],<span class="comment">//数据</span></span><br><span class="line">                allLoaded: <span class="literal">false</span>,</span><br><span class="line">                bottomStatus: <span class="string">''</span>,</span><br><span class="line">                wrapperHeight: <span class="number">0</span>,</span><br><span class="line">                topStatus: <span class="string">''</span>,</span><br><span class="line">                translate: <span class="number">0</span>,</span><br><span class="line">                moveTranslate: <span class="number">0</span>,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        created() &#123;</span><br><span class="line">            <span class="comment">//授权获取数据</span></span><br><span class="line">            <span class="keyword">this</span>.getNearInfo();</span><br><span class="line">        &#125;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            banner(index) &#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">`banner<span class="subst">$&#123;index&#125;</span>`</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            shopInfo(shopNum, customerNum) &#123;</span><br><span class="line">                <span class="keyword">this</span>.$router.push(&#123;<span class="attr">path</span>: <span class="string">'/shopList/shopInfo'</span>,<span class="attr">query</span>: &#123;shopNum,customerNum&#125;&#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">//上拉加载</span></span><br><span class="line">            loadBottom() &#123;</span><br><span class="line">                <span class="keyword">this</span>.$refs.loadmores.onBottomLoaded();</span><br><span class="line">                <span class="keyword">if</span> (!<span class="keyword">this</span>.loader) <span class="keyword">return</span>;</span><br><span class="line">                <span class="keyword">let</span> params = &#123;</span><br><span class="line">                    pageSize: <span class="number">10</span>,</span><br><span class="line">                    currentPage: <span class="keyword">this</span>.pageNum,</span><br><span class="line">                    mapLat: <span class="keyword">this</span>.lat,</span><br><span class="line">                    mapLng: <span class="keyword">this</span>.lng</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">this</span>.getNearList(params);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">//下拉刷新</span></span><br><span class="line">            loadTop() &#123;</span><br><span class="line">                <span class="keyword">this</span>.loader = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">this</span>.pageNum = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">this</span>.$refs.loadmores.onTopLoaded();</span><br><span class="line">                <span class="keyword">let</span> params = &#123;</span><br><span class="line">                    currentPage: <span class="keyword">this</span>.pageNum,</span><br><span class="line">                    pageSize: <span class="number">10</span>,</span><br><span class="line">                    mapLat: <span class="keyword">this</span>.lat,</span><br><span class="line">                    mapLng: <span class="keyword">this</span>.lng</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">this</span>.getNearList(params)</span><br><span class="line">            &#125;,</span><br><span class="line">            getNearInfo() &#123;</span><br><span class="line">                <span class="keyword">let</span> _this = <span class="keyword">this</span>,</span><br><span class="line">                infoParameter = &#123;</span><br><span class="line">                    requestUrl: <span class="built_in">encodeURIComponent</span>(<span class="built_in">window</span>.location.href.split(<span class="string">"#"</span>)[<span class="number">0</span>])</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//先从后台获取后面需要配置的微信信息</span></span><br><span class="line">                <span class="keyword">this</span>.$http.getNearInfo(infoParameter).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span>(res.result == <span class="string">'success'</span>) &#123;</span><br><span class="line">                        <span class="keyword">let</span> data = res.data,</span><br><span class="line">                            appId = data.appId,</span><br><span class="line">                            nonceStr = data.nonceStr,</span><br><span class="line">                            timestamp = data.timestamp,</span><br><span class="line">                            signature = data.signature;</span><br><span class="line">                        <span class="comment">//根据后台返回的配置信息进行配置</span></span><br><span class="line">                        wx.config(&#123;</span><br><span class="line">                            debug: <span class="literal">false</span>,               <span class="comment">//必填，true为调试模式，已alert形式弹出</span></span><br><span class="line">                            appId: appId,               <span class="comment">// 必填，公众号的唯一标识</span></span><br><span class="line">                            timestamp: timestamp,       <span class="comment">// 必填，生成签名的时间戳</span></span><br><span class="line">                            nonceStr: nonceStr,         <span class="comment">// 必填，生成签名的随机串</span></span><br><span class="line">                            signature: signature,       <span class="comment">// 必填，签名</span></span><br><span class="line">                            jsApiList: [<span class="string">'showOptionMenu'</span>, </span><br><span class="line">                                        <span class="string">'onMenuShareTimeline'</span>,</span><br><span class="line">                                        <span class="string">'onMenuShareAppMessage'</span>,</span><br><span class="line">                                        <span class="string">'getLocation'</span>]  <span class="comment">// 必填，需要使用的JS接口列表</span></span><br><span class="line">                        &#125;);</span><br><span class="line">                        <span class="comment">//开始获取用户的位置信息</span></span><br><span class="line">                        wx.ready(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                            wx.getLocation(&#123;</span><br><span class="line">                                type: <span class="string">'gcj02'</span>, <span class="comment">//默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'</span></span><br><span class="line">                                success: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">                                    <span class="comment">//用户点击同意授权的回调函数</span></span><br><span class="line">                                    _this.lat = res.latitude; <span class="comment">// 纬度</span></span><br><span class="line">                                    _this.lng = res.longitude; <span class="comment">// 经度</span></span><br><span class="line">                                    <span class="comment">//list请求</span></span><br><span class="line">                                    <span class="keyword">let</span> params = &#123;</span><br><span class="line">                                        currentPage: _this.pageNum,</span><br><span class="line">                                        pageSize: <span class="number">10</span>,</span><br><span class="line">                                        mapLat: _this.lat,</span><br><span class="line">                                        mapLng: _this.lng</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="comment">//获取列表信息</span></span><br><span class="line">                                    _this.getNearList(params)</span><br><span class="line"></span><br><span class="line">                                &#125;,</span><br><span class="line">                                cancel: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                                    <span class="comment">//用户点击拒绝授权的回调函数，设置默认位置（天安门）</span></span><br><span class="line">                                    _this.lat = <span class="number">39.9219</span>;</span><br><span class="line">                                    _this.lng = <span class="number">116.44355</span>;</span><br><span class="line">                                    <span class="keyword">let</span> params = &#123;</span><br><span class="line">                                        currentPage: _this.pageNum,</span><br><span class="line">                                        pageSize: <span class="number">10</span>,</span><br><span class="line">                                        mapLat: _this.lat,</span><br><span class="line">                                        mapLng: _this.lng</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="comment">//获取列表信息</span></span><br><span class="line">                                    _this.getNearList(params)</span><br><span class="line">                                &#125;,</span><br><span class="line">                                error: <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line">                                    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;);</span><br><span class="line">                        &#125;)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(err);</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            getNearList(params) &#123;</span><br><span class="line">                <span class="keyword">let</span> pageNum = <span class="keyword">this</span>.pageNum;</span><br><span class="line">                <span class="keyword">if</span> (!<span class="keyword">this</span>.loader) <span class="keyword">return</span>;</span><br><span class="line">                <span class="keyword">this</span>.$http.getNearList(params).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (res.result == <span class="string">'success'</span>) &#123;</span><br><span class="line">                        <span class="keyword">let</span> data = res.data,</span><br><span class="line">                            lister = data.list,</span><br><span class="line">                            list = <span class="keyword">this</span>.list,</span><br><span class="line">                            l = lister.length;</span><br><span class="line">                        <span class="keyword">if</span> (pageNum &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                            list = [...list, ...lister];</span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            list = lister;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">this</span>.list = list;</span><br><span class="line">                        <span class="keyword">if</span> (l &lt; <span class="number">10</span>) &#123;</span><br><span class="line">                            <span class="keyword">this</span>.loader = <span class="literal">false</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            <span class="keyword">this</span>.pageNum = (pageNum + <span class="number">1</span>);</span><br><span class="line">                            <span class="keyword">this</span>.loader = <span class="literal">true</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>3、css部分<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">&lt;style lang="scss" scoped&gt;</span><br><span class="line">    <span class="selector-class">.wraper</span> &#123;</span><br><span class="line">        <span class="attribute">height</span>: <span class="built_in">calc</span>(100vh - 1rem);</span><br><span class="line">        <span class="attribute">overflow-y</span>: auto;</span><br><span class="line">        <span class="attribute">overflow-x</span>: hidden;</span><br><span class="line">        .box &#123;</span><br><span class="line">            <span class="selector-tag">overflow</span>: <span class="selector-tag">hidden</span>;</span><br><span class="line">            <span class="selector-tag">width</span>: 100%;</span><br><span class="line">            <span class="selector-tag">height</span>: 3<span class="selector-tag">rem</span>;</span><br><span class="line">            <span class="selector-tag">img</span> &#123;</span><br><span class="line">                <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">height</span>: <span class="number">3rem</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="selector-class">.listBox</span> &#123;</span><br><span class="line">            <span class="attribute">width</span>: <span class="number">93%</span>;</span><br><span class="line">            <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">            <span class="attribute">background</span>: <span class="number">#fff</span>;</span><br><span class="line">            <span class="attribute">position</span>: relative;</span><br><span class="line">            <span class="attribute">border-bottom</span>: solid <span class="number">#e6e6e6</span> <span class="number">1px</span>;</span><br><span class="line">            <span class="attribute">padding</span>: .<span class="number">26rem</span> <span class="number">0</span>;</span><br><span class="line">            .boxLeft &#123;</span><br><span class="line">                <span class="selector-tag">width</span>: 20%;</span><br><span class="line">                <span class="selector-tag">height</span>: 1<span class="selector-class">.26rem</span>;</span><br><span class="line">                <span class="selector-tag">float</span>: <span class="selector-tag">left</span>;</span><br><span class="line">                <span class="selector-tag">img</span> &#123;</span><br><span class="line">                    <span class="attribute">width</span>: <span class="number">1.26rem</span>;</span><br><span class="line">                    <span class="attribute">height</span>: <span class="number">1.26rem</span>;</span><br><span class="line">                    <span class="attribute">border</span>: solid <span class="number">#e8e8e8</span> <span class="number">1px</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="selector-class">.boxRight</span> &#123;</span><br><span class="line">                <span class="attribute">width</span>: <span class="number">80%</span>;</span><br><span class="line">                <span class="attribute">float</span>: left;</span><br><span class="line">                <span class="attribute">font-size</span>: .<span class="number">3rem</span>;</span><br><span class="line">                .boxRightTop &#123;</span><br><span class="line">                    <span class="selector-tag">width</span>: 100%;</span><br><span class="line">                    <span class="selector-tag">height</span>: 1<span class="selector-class">.28rem</span>;</span><br><span class="line">                    <span class="selector-class">.boxRightTopName</span> &#123;</span><br><span class="line">                        <span class="attribute">float</span>: left;</span><br><span class="line">                        <span class="attribute">line-height</span>: .<span class="number">3rem</span>;</span><br><span class="line">                        <span class="attribute">padding</span>: .<span class="number">1rem</span> <span class="number">0</span>;</span><br><span class="line">                        <span class="attribute">font-weight</span>: bold;</span><br><span class="line">                        <span class="attribute">font-size</span>: .<span class="number">3rem</span>;</span><br><span class="line">                        <span class="attribute">overflow</span>: hidden;</span><br><span class="line">                        <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">                        <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="selector-class">.boxRightTopDistant</span> &#123;</span><br><span class="line">                        <span class="attribute">float</span>: right;</span><br><span class="line">                        <span class="attribute">height</span>: .<span class="number">3rem</span>;</span><br><span class="line">                        <span class="attribute">line-height</span>: .<span class="number">3rem</span>;</span><br><span class="line">                        <span class="attribute">font-size</span>: .<span class="number">26rem</span>;</span><br><span class="line">                        <span class="attribute">font-weight</span>: bolder;</span><br><span class="line">                        <span class="attribute">color</span>: <span class="number">#aeaeae</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="selector-class">.boxIntroduce</span> &#123;</span><br><span class="line">                        <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">                        <span class="attribute">height</span>: .<span class="number">78rem</span>;</span><br><span class="line">                        .boxVarieties &#123;</span><br><span class="line">                            <span class="selector-tag">display</span>: <span class="selector-tag">inline-block</span>;</span><br><span class="line">                            <span class="selector-tag">max-width</span>: 1<span class="selector-class">.2rem</span>;</span><br><span class="line">                            <span class="selector-tag">line-height</span>: <span class="selector-class">.78rem</span>;</span><br><span class="line">                            <span class="selector-tag">font-size</span>: <span class="selector-class">.24rem</span>;</span><br><span class="line">                            <span class="selector-tag">overflow</span>: <span class="selector-tag">hidden</span>;</span><br><span class="line">                            <span class="selector-tag">text-overflow</span>: <span class="selector-tag">ellipsis</span>;</span><br><span class="line">                            <span class="selector-tag">white-space</span>: <span class="selector-tag">nowrap</span>;</span><br><span class="line">                            <span class="selector-tag">color</span>: <span class="selector-id">#aeaeae</span>;</span><br><span class="line">                            <span class="selector-tag">padding-right</span>: <span class="selector-class">.2rem</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/16/mint-ui上拉加载下拉刷新踩坑记/" rel="next" title="mint-ui上拉加载下拉刷新踩坑记">
+                <i class="fa fa-chevron-left"></i> mint-ui上拉加载下拉刷新踩坑记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/dwf.jpg"
+                alt="杜万福" />
+            
+              <p class="site-author-name" itemprop="name">杜万福</p>
+              <p class="site-description motion-element" itemprop="description">滴水穿石</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hotwhy" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:duwanfu93@126.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.jq22.com/" title="前端插件" target="_blank">前端插件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://img.9cfcf.com/" title="可视化组件" target="_blank">可视化组件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.alloyteam.com/nav/" title="Web前端导航" target="_blank">Web前端导航</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.36zhen.com/t?id=3448" title="前端技术书籍资料" target="_blank">前端技术书籍资料</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wf.uisdc.com/cn/" title="google前端开发基础" target="_blank">google前端开发基础</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、引入微信js-sdk"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1&#x3001;&#x5F15;&#x5165;&#x5FAE;&#x4FE1;js-sdk" class="headerlink" title="1&#x3001;&#x5F15;&#x5165;&#x5FAE;&#x4FE1;js-sdk"></a>1&#x3001;&#x5F15;&#x5165;&#x5FAE;&#x4FE1;js-sdk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、项目中使用"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2&#x3001;&#x9879;&#x76EE;&#x4E2D;&#x4F7F;&#x7528;" class="headerlink" title="2&#x3001;&#x9879;&#x76EE;&#x4E2D;&#x4F7F;&#x7528;"></a>2&#x3001;&#x9879;&#x76EE;&#x4E2D;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、具体开始使用"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3&#x3001;&#x5177;&#x4F53;&#x5F00;&#x59CB;&#x4F7F;&#x7528;" class="headerlink" title="3&#x3001;&#x5177;&#x4F53;&#x5F00;&#x59CB;&#x4F7F;&#x7528;"></a>3&#x3001;&#x5177;&#x4F53;&#x5F00;&#x59CB;&#x4F7F;&#x7528;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杜万福</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("ILp844dDzwPN0uYG6ofHcdCt-gzGzoHsz", "XS2nlghFJ63nlGICG9dUP7vh");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

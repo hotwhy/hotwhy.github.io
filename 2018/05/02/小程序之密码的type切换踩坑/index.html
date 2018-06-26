@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <meta name="keywords" content="javascript,微信小程序," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="问题初入小程序，框架和vue差别不是太大，上手比较容易，但是在表单这一块，小程序显得有些小坑，需求就是做一个下面的需求，进行input的type属性的来回切换（vue很轻松就能实现~~），效果如下图 记录代码如下开始的需求是一个checkbox组件控制三个密码框（上图只显示两个密码框），但是因为微信小程序改变type需要获取到焦点，常用开发方式（vue改变type方式）在小程序里面不受用，会有bu">
+<meta name="keywords" content="javascript,微信小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序之密码的type切换踩坑">
+<meta property="og:url" content="http://yoursite.com/2018/05/02/小程序之密码的type切换踩坑/index.html">
+<meta property="og:site_name" content="杜万福的博客">
+<meta property="og:description" content="问题初入小程序，框架和vue差别不是太大，上手比较容易，但是在表单这一块，小程序显得有些小坑，需求就是做一个下面的需求，进行input的type属性的来回切换（vue很轻松就能实现~~），效果如下图 记录代码如下开始的需求是一个checkbox组件控制三个密码框（上图只显示两个密码框），但是因为微信小程序改变type需要获取到焦点，常用开发方式（vue改变type方式）在小程序里面不受用，会有bu">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/passInput.png">
+<meta property="og:updated_time" content="2018-06-26T13:22:45.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小程序之密码的type切换踩坑">
+<meta name="twitter:description" content="问题初入小程序，框架和vue差别不是太大，上手比较容易，但是在表单这一块，小程序显得有些小坑，需求就是做一个下面的需求，进行input的type属性的来回切换（vue很轻松就能实现~~），效果如下图 记录代码如下开始的需求是一个checkbox组件控制三个密码框（上图只显示两个密码框），但是因为微信小程序改变type需要获取到焦点，常用开发方式（vue改变type方式）在小程序里面不受用，会有bu">
+<meta name="twitter:image" content="http://yoursite.com/images/passInput.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/02/小程序之密码的type切换踩坑/"/>
+
+
+
+
+
+  <title>小程序之密码的type切换踩坑 | 杜万福的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+<a href="https://github.com/hotwhy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">杜万福的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">滴水穿石</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/02/小程序之密码的type切换踩坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杜万福">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/dwf.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杜万福的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">小程序之密码的type切换踩坑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T17:46:26+08:00">
+                2018-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微信小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">微信小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/02/小程序之密码的type切换踩坑/" class="leancloud_visitors" data-flag-title="小程序之密码的type切换踩坑">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>初入小程序，框架和vue差别不是太大，上手比较容易，但是在表单这一块，小程序显得有些小坑，需求就是做一个下面的需求，进行input的type属性的来回切换（vue很轻松就能实现~~），效果如下图<br><img src="/images/passInput.png" alt="“图片描述”"></p>
+<h3 id="记录代码如下"><a href="#记录代码如下" class="headerlink" title="记录代码如下"></a>记录代码如下</h3><p>开始的需求是一个checkbox组件控制三个密码框（上图只显示两个密码框），但是因为微信小程序改变type需要获取到焦点，常用开发方式（vue改变type方式）在小程序里面不受用，会有bug，故改为3个checkbox组件分别控制对应的input，代码如下：<br><a id="more"></a><br>wxml片段<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"wraper"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"clearfix content"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;!isSet&#125;&#125;"</span> <span class="attr">class</span>=<span class="string">"rows"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"fl"</span>&gt;</span>旧密码<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">checkbox-group</span> <span class="attr">class</span>=<span class="string">"group fr"</span> <span class="attr">data-idx</span>=<span class="string">"0"</span> <span class="attr">bindchange</span>=<span class="string">"checkboxChange"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">checkbox</span> <span class="attr">hidden</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;checkboxItems[0].name&#125;&#125;"</span> <span class="attr">checked</span>=<span class="string">"&#123;&#123;checkboxItems[0].checked&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">checkbox</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon-checked"</span> <span class="attr">style</span>=<span class="string">"background:&#123;&#123;checkboxItems[0].checked ? urlShow : urlHidden&#125;&#125;;background-size: 36rpx 26rpx;"</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">checkbox-group</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">password</span>=<span class="string">"&#123;&#123;checkboxItems[0].inputType&#125;&#125;"</span> <span class="attr">focus</span>=<span class="string">'&#123;&#123;checkboxItems[0].focus&#125;&#125;'</span> <span class="attr">type</span>=<span class="string">'number'</span> <span class="attr">maxlength</span>=<span class="string">'6'</span> <span class="attr">placeholder</span>=<span class="string">'输入6位数字密码'</span> <span class="attr">bindinput</span>=<span class="string">'oldPassWord'</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"rows"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"fl"</span>&gt;</span>新密码<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">checkbox-group</span> <span class="attr">class</span>=<span class="string">"group fr"</span> <span class="attr">data-idx</span>=<span class="string">"1"</span> <span class="attr">bindchange</span>=<span class="string">"checkboxChange"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">checkbox</span> <span class="attr">hidden</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;checkboxItems[1].name&#125;&#125;"</span> <span class="attr">checked</span>=<span class="string">"&#123;&#123;checkboxItems[1].checked&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">checkbox</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon-checked"</span> <span class="attr">style</span>=<span class="string">"background:&#123;&#123;checkboxItems[1].checked ? urlShow : urlHidden&#125;&#125;;background-size: 36rpx 26rpx;"</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">checkbox-group</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">password</span>=<span class="string">"&#123;&#123;checkboxItems[1].inputType&#125;&#125;"</span> <span class="attr">focus</span>=<span class="string">'&#123;&#123;checkboxItems[1].focus&#125;&#125;'</span> <span class="attr">type</span>=<span class="string">'number'</span> <span class="attr">maxlength</span>=<span class="string">'6'</span> <span class="attr">placeholder</span>=<span class="string">'输入6位数字密码'</span> <span class="attr">bindinput</span>=<span class="string">'passWord'</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"rows noboder"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"fl"</span>&gt;</span>确认新密码<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">checkbox-group</span> <span class="attr">class</span>=<span class="string">"group fr"</span> <span class="attr">data-idx</span>=<span class="string">"2"</span> <span class="attr">bindchange</span>=<span class="string">"checkboxChange"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">checkbox</span> <span class="attr">hidden</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;checkboxItems[2].name&#125;&#125;"</span> <span class="attr">checked</span>=<span class="string">"&#123;&#123;checkboxItems[2].checked&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">checkbox</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"label-1__icon-checked"</span> <span class="attr">style</span>=<span class="string">"background:&#123;&#123;checkboxItems[2].checked ? urlShow : urlHidden&#125;&#125;;background-size: 36rpx 26rpx;"</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">checkbox-group</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">password</span>=<span class="string">"&#123;&#123;checkboxItems[2].inputType&#125;&#125;"</span> <span class="attr">focus</span>=<span class="string">'&#123;&#123;checkboxItems[2].focus&#125;&#125;'</span> <span class="attr">type</span>=<span class="string">'number'</span> <span class="attr">maxlength</span>=<span class="string">'6'</span> <span class="attr">placeholder</span>=<span class="string">'输入6位数字密码'</span> <span class="attr">bindinput</span>=<span class="string">'passWordAgain'</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"clearfix groupContent"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">text</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;!isSet&#125;&#125;"</span> <span class="attr">bindtap</span>=<span class="string">"forgetPass"</span> <span class="attr">class</span>=<span class="string">"fr forgetPass"</span>&gt;</span>忘记密码？<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">hidden</span>=<span class="string">"&#123;&#123; !errMsg &#125;&#125;"</span> <span class="attr">class</span>=<span class="string">"errMsg"</span>&gt;</span>&#123;&#123; errMsg &#125;&#125;<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"verify"</span> <span class="attr">bindtap</span>=<span class="string">"verify"</span>&gt;</span>确认<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这里wxss片段就省了（不是重点）<br>js片段(这里为了方便看，其他的js部分移除)<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    <span class="comment">//3个checkbox组件数据</span></span><br><span class="line">    checkboxItems: [</span><br><span class="line">      &#123;</span><br><span class="line">        name: <span class="string">'agree'</span>,</span><br><span class="line">        checked: <span class="literal">false</span>,</span><br><span class="line">        inputType: <span class="literal">true</span>,</span><br><span class="line">        focus: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        name: <span class="string">'agree'</span>,</span><br><span class="line">        checked: <span class="literal">false</span>,</span><br><span class="line">        inputType: <span class="literal">true</span>,</span><br><span class="line">        focus: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        name: <span class="string">'agree'</span>,</span><br><span class="line">        checked: <span class="literal">false</span>,</span><br><span class="line">        inputType: <span class="literal">true</span>,</span><br><span class="line">        focus: <span class="literal">false</span></span><br><span class="line">      &#125;],</span><br><span class="line">    urlShow: <span class="string">'url(../../imgs/icon-pwdshow.png) no-repeat'</span>,</span><br><span class="line">    urlHidden: <span class="string">'url(../../imgs/icon-pwdhidden.png) no-repeat;'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//checkbox</span></span><br><span class="line">  checkboxChange: <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> idx = e.currentTarget.dataset.idx,</span><br><span class="line">      checked = e.detail.value,</span><br><span class="line">      changed = &#123;&#125;,</span><br><span class="line">      inputType = <span class="string">`checkboxItems[<span class="subst">$&#123;idx&#125;</span>].inputType`</span>,</span><br><span class="line">      focus = <span class="string">`checkboxItems[<span class="subst">$&#123;idx&#125;</span>].focus`</span>,</span><br><span class="line">      tempObj = &#123;&#125;;</span><br><span class="line">    <span class="keyword">if</span> (checked.indexOf(<span class="keyword">this</span>.data.checkboxItems[idx].name) !== <span class="number">-1</span>) &#123;</span><br><span class="line">      changed[<span class="string">`checkboxItems[<span class="subst">$&#123;idx&#125;</span>].checked`</span>] = <span class="literal">true</span></span><br><span class="line">      tempObj[inputType] = <span class="literal">false</span>;</span><br><span class="line">      tempObj[focus] = <span class="literal">true</span>;</span><br><span class="line">      <span class="keyword">this</span>.setData(tempObj)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      changed[<span class="string">`checkboxItems[<span class="subst">$&#123;idx&#125;</span>].checked`</span>] = <span class="literal">false</span></span><br><span class="line">      tempObj[inputType] = <span class="literal">true</span>;</span><br><span class="line">      tempObj[focus] = <span class="literal">true</span>;</span><br><span class="line">      <span class="keyword">this</span>.setData(tempObj)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.setData(changed)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/24/弧形文字/" rel="next" title="弧形文字">
+                <i class="fa fa-chevron-left"></i> 弧形文字
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/16/mint-ui上拉加载下拉刷新踩坑记/" rel="prev" title="mint-ui上拉加载下拉刷新踩坑记">
+                mint-ui上拉加载下拉刷新踩坑记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/dwf.jpg"
+                alt="杜万福" />
+            
+              <p class="site-author-name" itemprop="name">杜万福</p>
+              <p class="site-description motion-element" itemprop="description">滴水穿石</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/hotwhy" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:duwanfu93@126.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.jq22.com/" title="前端插件" target="_blank">前端插件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://img.9cfcf.com/" title="可视化组件" target="_blank">可视化组件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.alloyteam.com/nav/" title="Web前端导航" target="_blank">Web前端导航</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.36zhen.com/t?id=3448" title="前端技术书籍资料" target="_blank">前端技术书籍资料</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wf.uisdc.com/cn/" title="google前端开发基础" target="_blank">google前端开发基础</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x95EE;&#x9898;" class="headerlink" title="&#x95EE;&#x9898;"></a>&#x95EE;&#x9898;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录代码如下"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BB0;&#x5F55;&#x4EE3;&#x7801;&#x5982;&#x4E0B;" class="headerlink" title="&#x8BB0;&#x5F55;&#x4EE3;&#x7801;&#x5982;&#x4E0B;"></a>&#x8BB0;&#x5F55;&#x4EE3;&#x7801;&#x5982;&#x4E0B;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杜万福</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("ILp844dDzwPN0uYG6ofHcdCt-gzGzoHsz", "XS2nlghFJ63nlGICG9dUP7vh");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -254,6 +254,159 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/另类实现星星评分（仅展示）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杜万福">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/dwf.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杜万福的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/10/另类实现星星评分（仅展示）/" itemprop="url">另类实现星星评分（仅展示）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T18:37:29+08:00">
+                2018-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/10/另类实现星星评分（仅展示）/" class="leancloud_visitors" data-flag-title="另类实现星星评分（仅展示）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>另类实现星星评分（仅展示），用于拓宽思路，实际并不怎么用得上：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> stars = <span class="string">'★★★★★☆☆☆☆☆'</span>;</span><br><span class="line"><span class="comment">//一颗星</span></span><br><span class="line"><span class="keyword">let</span> rate1 = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> star1 = stars.slice(<span class="number">5</span> - rate,<span class="number">10</span> - rate);</span><br><span class="line"><span class="built_in">console</span>.log(star1)  <span class="comment">//'★☆☆☆☆'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//两颗星</span></span><br><span class="line"><span class="keyword">let</span> rate2 = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> star2 = stars.slice(<span class="number">5</span> - rate,<span class="number">10</span> - rate);</span><br><span class="line"><span class="built_in">console</span>.log(star2)  <span class="comment">//'★★☆☆☆'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//三颗星</span></span><br><span class="line"><span class="keyword">let</span> rate3 = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">let</span> star3 = stars.slice(<span class="number">5</span> - rate,<span class="number">10</span> - rate);</span><br><span class="line"><span class="built_in">console</span>.log(star3)  <span class="comment">//'★★★☆☆'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四颗星</span></span><br><span class="line"><span class="keyword">let</span> rate4 = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">let</span> star4 = stars.slice(<span class="number">5</span> - rate,<span class="number">10</span> - rate);</span><br><span class="line"><span class="built_in">console</span>.log(star4)  <span class="comment">//'★★★★☆'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//五颗星</span></span><br><span class="line"><span class="keyword">let</span> rate5 = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">let</span> star5 = stars.slice(<span class="number">5</span> - rate,<span class="number">10</span> - rate);</span><br><span class="line"><span class="built_in">console</span>.log(star5)  <span class="comment">//'★★★★★'</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/dva的按需加载路由以及对应的model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1660,164 +1813,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/10/vue插件之vue-baidu-map/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="杜万福">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/dwf.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="杜万福的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/10/vue插件之vue-baidu-map/" itemprop="url">vue插件之vue-baidu-map</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-10T17:01:55+08:00">
-                2018-04-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/04/10/vue插件之vue-baidu-map/" class="leancloud_visitors" data-flag-title="vue插件之vue-baidu-map">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="1、引入vue-baidu-map"><a href="#1、引入vue-baidu-map" class="headerlink" title="1、引入vue-baidu-map"></a>1、引入vue-baidu-map</h3><p><code>npm install vue-baidu-map --save</code></p>
-<h3 id="2、项目中使用vue-baidu-map组件"><a href="#2、项目中使用vue-baidu-map组件" class="headerlink" title="2、项目中使用vue-baidu-map组件"></a>2、项目中使用vue-baidu-map组件</h3><p>我这里需求只有一个地图显示，故采用局部引用了，直接在需要使用的组件里面<br><code>import BaiduMap from &#39;vue-baidu-map/components/Map/Map.vue&#39;</code><br>伪代码如下：<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/10/vue插件之vue-baidu-map/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1872,7 +1867,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
